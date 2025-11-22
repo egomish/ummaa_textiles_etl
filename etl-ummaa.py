@@ -63,7 +63,7 @@ for entry in all_data:
     if entry["Culture"] != '':
         elem["mods:originInfo"] = entry["Culture"]
     if entry["Verbatim Geography"] != '':
-        gterms = ["continent", "country", "region", "state"]
+        gterms = ["continent", "region", "country", "state"]
         geog = entry["Verbatim Geography"].split("-")
         i = 0
         for i in range(len(geog)):
