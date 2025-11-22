@@ -1,4 +1,5 @@
 import csv
+import re
 import pprint
 
 # +-----------+
@@ -44,7 +45,29 @@ for entry in all_data:
     # required fields
     elem["dcterms:identifier"] = entry["Object identifier"]
     elem["dcterms:collection"] = entry["Divisions"]
-    elem["mods:dateOther"] = entry["AccessionDate"]
+
+    accdate = entry["AccessionDate"]
+    match = re.search("\d{2}/\d{2}/\d{4}", accdate) # MM/DD/YYYY format
+    if match:
+        splitdate = accdate.split("/")
+        accdate = splitdate[2] + "-" + splitdate[0] + "-" + splitdate[1]
+    match = re.search("\d{2}/\d{4}", accdate) # MM/YYYY format
+    if match:
+        splitdate = accdate.split("/")
+        accdate = splitdate[1] + "-" + splitdate[0]
+    match = re.search("\d{4}s", accdate) # YYYYs format (use EDTF - YYY0/YYY9)
+    if match:
+        splitdate = accdate[:-2]
+        accdate = splitdate + "0/" + splitdate + "9"
+    match = re.search("\d{4}", accdate) # YYYY format
+    if match:
+        accdate = accdate
+    match = re.search("\d{2}/\d{2}/\d{2}", accdate) # MM-DD-YY format
+    if match:
+        splitdate = accdate.split("/")
+        accdate = "19" + splitdate[2] + "-" + splitdate[0] + "-" + splitdate[1]
+    elem["mods:dateOther"] = accdate
+
     elem["dcterms:accrualMethod"] = entry["AccessionMethod"]
     elem["mods:recordIdentifier"] = entry["Accession Number"]
     elem["dcterms:type"] = entry["Object Type"]
