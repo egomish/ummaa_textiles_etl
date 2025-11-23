@@ -80,6 +80,7 @@ for entry in all_data:
     if entry["Type"] != '':
         elem["mods:typeOfResource"] = entry["Type"]
     if entry["Display Date"] != '':
+        # XXX: no textile items use this attribute
         elem["dcterms:date"] = entry["Display Date"]
     if entry["Provenience"] != '':
         elem["dcterms:provenance"] = entry["Provenience"]
